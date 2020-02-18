@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+    string[] filmes = (string[])ViewData["filme"];
+    string[] fotos = (string[])ViewData["fotos"];
+    string[] autor = (string[])ViewData["autor"];
+}
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+
+<h2>Filmes</h2>
+
+<ul class="movies">
+    @for (int i = 0; i < (int)ViewData["NumTimes"]; i++)
+    {
+        <li data-img="@fotos[i]" data-name="@filmes[i]"><img src="@fotos[i]"/> <span>@filmes[i]</span><br /><span class="autor">@autor[i]</span>
+    </li>
+    }
+</ul>
+
+
+<style>
+    .movies li {
+        list-style: none;
+        margin: 20px;
+        transition: 0.4s;
+        display: inline-table;
+        padding: 5px;
+        width: 200px;
+        max-width: 900px;
+        transform: scale(1.15);
+        cursor: pointer;
+        border-radius: 2px;
+        background: #eee;
+        box-shadow: -2px 1px 2px rgba(0,0,0,.30);
+    }
+
+
+    .movies li span{
+        margin-left: 5px;
+        position: relative;
+        position: absolute;
+        top: 20px;
+        left: 72px;
+    }
+
+    .autor{
+        top: 50px !important;
+    }
+
+    .movies li:hover{
+        background: #ccc;
+        transform: scale(1.2);
+    }
+
+    img{
+        width: 60px;
+        transform: scale(1.1);
+        height: 100px;
+        object-fit: cover;
+        border-solid: 1px solid #ccc;
+        position: relative;
+        left: -2px;
+    }
+
+    .aberto{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        z-index: -10;
+        background: rgba(0,0,0,.60);
+        top: 0px;
+        left: 0px;
+        display: none;
+    }
+
+        .aberto img {
+            position: relative;
+            width: 400px;
+            max-width: 250px;
+            height: 400px;
+            z-index: 99999999;
+            box-shadow: -2px 1px 2px rgba(0,0,0,.50);
+            left: 4px;
+            transform: scale(1.2);
+            top: -25px;
+        }
+
+    @@-webkit-keyframes zoom {
+        0% {
+            transform: scale(0.5) translate(-50%, -50%);
+        }
+        50% {
+            transform: scale(1.2,1.2) translate(-50%, -50%);
+        }
+        100% {
+            transform: scale(1) translate(-50%, -50%);
+        }
+    }
+
+    .sair {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        z-index: 40000;
+        background: transparent;
+        top: 0px;
+        left: 0px;
+        display: block;
+        cursor: pointer;
+    }
+
+    .info {
+        position: fixed;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        background: #ddd;
+        padding: 6px;
+        animation: zoom 0.4s;
+        box-shadow: -2px 1px 2px rgba(0,0,0,.30);
+        overflow: hidden;
+        z-index: 999999999;
+    }
+
+    .info h1{
+        padding: 4px;
+    }
+</style>
+
+<div class="aberto">
+    <div class="before">
+
+    </div>
+</div>
+
+<script>
+    
+    function zoom() {
+        $(".movies li").click(function () {
+            const image = $(this).data("img");
+            const name = $(this).data("name");
+            $(".aberto").css({
+                "z-index": 8000,
+                "display": "block"
+            });
+            $(".aberto .before").before(`<div class="info"> <img src="${image}"/> <h1>${name}</h1> </div>`);
+            $(".aberto .before").before(`<div class="sair"></div>`);
+            sair();
+        });
+    }
+    
+
+    function sair() {
+        $(".aberto .sair").click(function () {
+            $(".aberto").html("<div class='before'></div>");
+            $(".aberto").css({
+                "z-index": 1000,
+                "display": "none"
+            });
+        });
+    }
+
+    zoom();
+</script>
